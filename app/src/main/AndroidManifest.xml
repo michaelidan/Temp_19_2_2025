@@ -57,7 +57,16 @@
         <activity
             android:name=".AdminListActivity"
             android:exported="false" /> <!-- Michael, 26/01/2025 END -->
-        <!-- Main activity -->
+
+        <!-- הוספת UserPostsActivity למנהל - Michael, 17/2/2025 -->
+        <activity
+            android:name=".UserPostsActivity"
+            android:exported="false"
+            android:label="פוסטים של משתמש" />
+        <!-- Michael, 17/2/2025 END -->
+
+
+       <!-- Main activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true" >

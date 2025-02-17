@@ -32,4 +32,13 @@
         android:id="@+id/postsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <!-- כפתור חדש להצגת רשימת פוסטים לכל משתמש -->
+    <Button
+        android:id="@+id/btnViewUserPosts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="רשימת פוסטים לכל משתמש"
+        android:layout_margin="8dp"/>
+
 </LinearLayout>

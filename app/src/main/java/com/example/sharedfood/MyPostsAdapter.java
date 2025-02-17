@@ -21,6 +21,8 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.PostView
     // Michael START 14.01.2025 SSSSSSSSSSSSSSSSSSSSSS
     private PostDeleteListener deleteListener;
     private PostEditListener editListener; // מאזין לעריכה בנפרד
+    private boolean isAdminView; // האם מוצג במסך ניהול
+
 
     // ממשקים שמגדיר אירועים לכפתורי עריכה ומחיקה
     public interface PostEditListener {
@@ -37,6 +39,20 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.PostView
         this.posts = posts;
         this.deleteListener = deleteListener;
         this.editListener = editListener;  // (Michael ADD 14.01.2025)
+    }
+
+    // בנאי המקבל רשימת פוסטים ומאזין אחד לשני האירועים
+    public MyPostsAdapter(List<Post> posts, PostDeleteListener deleteListener, PostEditListener editListener) {
+        this.posts = posts;
+        this.deleteListener = deleteListener;
+        this.editListener = editListener;  // (Michael ADD 14.01.2025)
+    }
+
+    public MyPostsAdapter(List<Post> posts, PostDeleteListener deleteListener, PostEditListener editListener, boolean isAdminView) {
+        this.posts = posts;
+        this.deleteListener = deleteListener;
+        this.editListener = editListener;
+        this.isAdminView = isAdminView; // Michael ADD 30.01.2025
     }
 
     // Michael END 14.01.2025  EEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
@@ -95,17 +111,29 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.PostView
                 holder.filtersChipGroup.addView(chip);
             }
         } else {
-            // אם אין סינונים, הצגת הודעה או פשוט הימנעו מהוספת ChipGroup ריק
             Chip chip = new Chip(holder.filtersChipGroup.getContext());
             chip.setText("אין סינונים");
             chip.setCheckable(false);
             holder.filtersChipGroup.addView(chip);
         }
 
-        // כפתורי עריכה ומחיקה
-        holder.editPostButton.setOnClickListener(v -> editListener.onEditClick(post));
-        holder.deletePostButton.setOnClickListener(v -> deleteListener.onDeleteClick(post));
+        // הצגת כפתור מחיקה רק אם זה מצב ניהול
+        if (isAdminView) {
+            holder.deletePostButton.setVisibility(View.VISIBLE);
+            holder.deletePostButton.setOnClickListener(v -> deleteListener.onDeleteClick(post));
+        } else {
+            holder.deletePostButton.setVisibility(View.GONE);
+        }
+
+        // כפתור עריכה (רק אם יש מאזין)
+        if (editListener != null) {
+            holder.editPostButton.setVisibility(View.VISIBLE);
+            holder.editPostButton.setOnClickListener(v -> editListener.onEditClick(post));
+        } else {
+            holder.editPostButton.setVisibility(View.GONE);
+        }
     }
+
 
     @Override
     public int getItemCount() {
