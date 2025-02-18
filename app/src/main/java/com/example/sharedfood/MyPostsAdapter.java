@@ -117,13 +117,6 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.PostView
             holder.filtersChipGroup.addView(chip);
         }
 
-        // הצגת כפתור מחיקה רק אם זה מצב ניהול
-        if (isAdminView) {
-            holder.deletePostButton.setVisibility(View.VISIBLE);
-            holder.deletePostButton.setOnClickListener(v -> deleteListener.onDeleteClick(post));
-        } else {
-            holder.deletePostButton.setVisibility(View.GONE);
-        }
 
         // כפתור עריכה (רק אם יש מאזין)
         if (editListener != null) {
