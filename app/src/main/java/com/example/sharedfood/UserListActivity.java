@@ -1,10 +1,8 @@
 package com.example.sharedfood;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -76,15 +74,7 @@ public class UserListActivity extends AppCompatActivity {
 
         // טעינת המשתמשים מתוך מסד הנתונים והצגתם ברשימה
         loadUsers();
-
-        // קישור לכפתור החדש "רשימת פוסטים לכל משתמש"
-        Button btnViewUserPosts = findViewById(R.id.btnViewUserPosts);
-        btnViewUserPosts.setOnClickListener(v -> {
-            Intent intent = new Intent(UserListActivity.this, UserPostsActivity.class);
-            startActivity(intent);
-        });
     }
-
 
 
     private void loadUsers() {
@@ -146,23 +136,9 @@ public class UserListActivity extends AppCompatActivity {
             case "promote":
                 promoteToAdmin(user);
                 break;
-            /*
-               // Michael add 17/0/2025 START
-            case "view_posts": // 🔹 הוספנו אופציה חדשה להצגת פוסטים
-                viewUserPosts(user);
-                break;
-             */
         }
     }
-/*
-    private void viewUserPosts(User user) {
-        Intent intent = new Intent(UserListActivity.this, UserPostsActivity.class);
-        intent.putExtra("userEmail", user.getEmail());
-        startActivity(intent);
-    }
- */
 
-    // Michael add 17/0/2025 END
     private void showTempBanDialog(User user) {
         // בדיקה אם המשתמש כבר חסום זמנית
         db.collection("temp_banned_users").document(user.getEmail()).get().addOnSuccessListener(document -> {

@@ -141,6 +141,8 @@ dependencies {
     testImplementation("net.bytebuddy:byte-buddy:1.12.22") // או גרסה חדשה יותר אם זמינה
     testImplementation("org.mockito:mockito-core:5.4.0")
     // Michael - please keep on them to the test of Admin - End
+// implementation("androidx.recyclerview:recyclerview:1.4.0")
+
 
 
 }

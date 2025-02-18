@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,28 +35,37 @@ import java.util.List;
     private List<Post> postsList;
     private static final String TAG = "ManagePostsActivity";
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manage_posts);
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_manage_posts);
 
-        // Initialize Firebase Firestore
-        db = FirebaseFirestore.getInstance();
+            // Initialize Firebase Firestore
+            db = FirebaseFirestore.getInstance();
 
-        // Initialize views and lists
-        recyclerView = findViewById(R.id.postsRecyclerView);
-        emptyStateText = findViewById(R.id.emptyStateText);
-        postsList = new ArrayList<>();
+            // Initialize views and lists
+            recyclerView = findViewById(R.id.postsRecyclerView);
+            emptyStateText = findViewById(R.id.emptyStateText);
+            postsList = new ArrayList<>();
 
-        setupRecyclerView();
-        loadAllPosts();
-    }
+            setupRecyclerView();
+            loadAllPosts();
 
-    private void setupRecyclerView() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MyPostsAdapter(postsList, this, this);
-        recyclerView.setAdapter(adapter);
-    }
+            // 🔹 קישור לכפתור החדש "רשימת פוסטים לכל משתמש"
+            Button btnViewUserPosts = findViewById(R.id.btnViewUserPosts);
+            btnViewUserPosts.setOnClickListener(v -> {
+                Intent intent = new Intent(ManagePostsActivity.this, UserListActivity.class);
+                startActivity(intent);
+            });
+        }
+
+
+        private void setupRecyclerView() {
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            adapter = new MyPostsAdapter(postsList, this, this, true); // הוספת true כדי לציין שמדובר במסך ניהול
+            recyclerView.setAdapter(adapter);
+        }
+
 
         public void loadAllPosts() {
             db.collection("posts")
