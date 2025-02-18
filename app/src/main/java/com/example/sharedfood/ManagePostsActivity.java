@@ -40,10 +40,8 @@ import java.util.List;
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_manage_posts);
 
-            // Initialize Firebase Firestore
             db = FirebaseFirestore.getInstance();
 
-            // Initialize views and lists
             recyclerView = findViewById(R.id.postsRecyclerView);
             emptyStateText = findViewById(R.id.emptyStateText);
             postsList = new ArrayList<>();
@@ -51,14 +49,8 @@ import java.util.List;
             setupRecyclerView();
             loadAllPosts();
 
-            // 🔹 קישור לכפתור החדש "רשימת פוסטים לכל משתמש"
-            Button btnViewUserPosts = findViewById(R.id.btnViewUserPosts);
-            btnViewUserPosts.setOnClickListener(v -> {
-                Intent intent = new Intent(ManagePostsActivity.this, UserListActivity.class);
-                startActivity(intent);
-            });
         }
-
+        
 
         private void setupRecyclerView() {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));

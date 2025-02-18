@@ -35,5 +35,13 @@ public class AdminActionsActivity extends AppCompatActivity {
             startActivity(intent);
         });
         // Michael, 26/01/2025 - END: הוספת כפתור "רשימת משתמשים"
+
+        // Michael, 17/02/2025 - START: הוספת כפתור "רשימת פוסטים לכל משתמש"
+        Button userPostsListButton = findViewById(R.id.userPostsListButton);
+        userPostsListButton.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminActionsActivity.this, UserListActivity.class);
+            startActivity(intent);
+        });
+        // Michael, 17/02/2025 - END: הוספת כפתור "רשימת פוסטים לכל משתמש"
     }
 }
