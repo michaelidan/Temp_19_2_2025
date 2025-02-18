@@ -117,15 +117,15 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.PostView
             holder.filtersChipGroup.addView(chip);
         }
 
+        // ✅ כפתור מחיקה זמין תמיד (גם למשתמשים וגם למנהלים)
+        holder.deletePostButton.setVisibility(View.VISIBLE);
+        holder.deletePostButton.setOnClickListener(v -> deleteListener.onDeleteClick(post));
 
-        // כפתור עריכה (רק אם יש מאזין)
-        if (editListener != null) {
-            holder.editPostButton.setVisibility(View.VISIBLE);
-            holder.editPostButton.setOnClickListener(v -> editListener.onEditClick(post));
-        } else {
-            holder.editPostButton.setVisibility(View.GONE);
-        }
+        // ✅ כפתור עריכה זמין תמיד
+        holder.editPostButton.setVisibility(View.VISIBLE);
+        holder.editPostButton.setOnClickListener(v -> editListener.onEditClick(post));
     }
+
 
 
     @Override

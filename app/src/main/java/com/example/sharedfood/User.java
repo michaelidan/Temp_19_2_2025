@@ -1,9 +1,12 @@
 package com.example.sharedfood;
 
 public class User {
+
+    private String id; // 🔴 נשתמש ב-id כי זה מזהה המשתמש בפיירסטור
     private String email;
     private boolean isBanned;
     private Long tempBanTime;
+
 
     // Constructor with three parameters
     public User(String email, boolean isBanned, Long tempBanTime) {
@@ -19,7 +22,29 @@ public class User {
         this.tempBanTime = null; // Default to null
     }
 
+    // 🔹 בנאי מלא
+    public User(String id, String email, boolean isBanned, Long tempBanTime) {
+        this.id = id;  // 🔴 שומר את ה-ID הנכון
+        this.email = email;
+        this.isBanned = isBanned;
+        this.tempBanTime = tempBanTime;
+    }
+
+    // 🔹 בנאי עבור Firestore (חובה)
+    public User() {}
+
+
     // Getters and Setters
+
+    //public String getId() { return userId; } // ✅ מחזיר את ה-ID הנכון
+
+
+    public String getId() { return id; }
+
+
+    public void setId(String id) { this.id = id; }
+
+
     public String getEmail() {
         return email;
     }

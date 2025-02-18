@@ -1,5 +1,6 @@
 package com.example.sharedfood;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -49,6 +50,13 @@ public class UserListActivity extends AppCompatActivity {
         handler.removeCallbacks(removeExpiredBansTask); // הפסקת המשימה
     }
 
+    // ✅ פונקציה לפתיחת רשימת הפוסטים של המשתמש שנבחר
+    public void viewUserPosts(User user) {
+        Intent intent = new Intent(UserListActivity.this, UserPostsActivity.class);
+        intent.putExtra("userEmail", user.getEmail());
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,19 +70,21 @@ public class UserListActivity extends AppCompatActivity {
 
         // אתחול ה-RecyclerView להצגת רשימת המשתמשים
         userRecyclerView = findViewById(R.id.userRecyclerView);
-
-        // קביעת מנהל הפריסה לרשימה, במקרה זה פריסה לינארית (רשימה אנכית)
         userRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // יצירת אדפטר לרשימת המשתמשים והגדרת פונקציה לטיפול בפעולות על המשתמשים
-        userAdapter = new UserAdapter(new ArrayList<>(), this::performActionOnUser);
-
-        // חיבור האדפטר ל-RecyclerView כדי להציג את הנתונים על המסך
+        // ✅ מאזין ללחיצה על משתמש, מוביל לרשימת הפוסטים שלו
+        userAdapter = new UserAdapter(new ArrayList<>(), this::performActionOnUser, this::viewUserPosts);
         userRecyclerView.setAdapter(userAdapter);
+
+
 
         // טעינת המשתמשים מתוך מסד הנתונים והצגתם ברשימה
         loadUsers();
     }
+
+
+
+
 
 
     private void loadUsers() {

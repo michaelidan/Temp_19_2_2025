@@ -39,7 +39,7 @@ public class AdminActionsActivity extends AppCompatActivity {
         // Michael, 17/02/2025 - START: הוספת כפתור "רשימת פוסטים לכל משתמש"
         Button userPostsListButton = findViewById(R.id.userPostsListButton);
         userPostsListButton.setOnClickListener(v -> {
-            Intent intent = new Intent(AdminActionsActivity.this, UserListActivity.class);
+            Intent intent = new Intent(AdminActionsActivity.this, UserPostListActivity.class);
             startActivity(intent);
         });
         // Michael, 17/02/2025 - END: הוספת כפתור "רשימת פוסטים לכל משתמש"

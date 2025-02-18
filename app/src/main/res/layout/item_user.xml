@@ -52,6 +52,17 @@
                 android:text="חסום זמנית"
                 android:textColor="@android:color/white" />
 
+            <!-- כפתור פוסטים -->
+            <Button
+                android:id="@+id/viewPostsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/green_color"
+                android:text="פוסטים"
+                android:textColor="@android:color/white"
+                android:visibility="gone"/>  <!-- מוסתר כברירת מחדל -->
+
             <!-- כפתור להפוך למנהל -->
             <Button
                 android:id="@+id/promoteUserButton"

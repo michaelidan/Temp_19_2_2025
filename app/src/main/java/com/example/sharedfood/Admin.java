@@ -16,4 +16,4 @@ public class Admin {
     public boolean isSuperAdmin() {
         return isSuperAdmin;
     }
-}
+} // 0

@@ -54,7 +54,7 @@ public class UserTest {
         // Arrange
         List<User> users = new ArrayList<>();
         users.add(new User("test@example.com", false, null));
-        userAdapter = new UserAdapter(users, mockListener);
+        userAdapter = new UserAdapter(users, mockListener, null);
 
         // Mock behavior - just to ensure no interaction with listener affects the test
         doNothing().when(mockListener).onAction(any(User.class), anyString());

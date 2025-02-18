@@ -61,11 +61,15 @@
         <!-- הוספת UserPostsActivity, UserListActivity למנהל - Michael, 17/2/2025 -->
         <activity
             android:name=".UserPostsActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="פוסטים של משתמש" />
 
         <activity
             android:name=".UserListActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".UserPostListActivity"
             android:exported="false" />
         <!-- Michael, 27/01/2025 END -->
         <!-- Michael, 17/2/2025 END -->

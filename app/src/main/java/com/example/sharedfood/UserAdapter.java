@@ -15,16 +15,30 @@ import java.util.List;
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
 
     private final List<User> userList;
-    private final UserActionListener listener;
+
+    private final UserActionListener actionListener;
+    private final OnUserClickListener onUserClickListener;
+
 
     public interface UserActionListener {
         void onAction(User user, String action);
     }
 
-    public UserAdapter(List<User> userList, UserActionListener listener) {
-        this.userList = userList;
-        this.listener = listener;
+    public interface OnUserClickListener {
+        void onUserClick(User user);
     }
+
+
+    //    public UserAdapter(List<User> userList, UserActionListener listener) {
+//        this.userList = userList;
+//        this.listener = listener;
+//    }
+    public UserAdapter(List<User> userList, UserActionListener actionListener, OnUserClickListener onUserClickListener) {
+        this.userList = userList;
+        this.actionListener = actionListener;
+        this.onUserClickListener = onUserClickListener;
+    }
+
 
     @NonNull
     @Override
@@ -38,13 +52,26 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         User user = userList.get(position);
         holder.emailTextView.setText(user.getEmail());
 
-        // Update button states based on user status
-        holder.banButton.setText(user.isBanned() ? "בטל חסימה" : "חסום");
-        holder.banButton.setOnClickListener(v -> listener.onAction(user, "ban"));
+        // זיהוי אם אנחנו ב- UserPostListActivity
+        boolean isPostListActivity = onUserClickListener != null;
 
-        holder.tempBanButton.setOnClickListener(v -> listener.onAction(user, "temp_ban"));
-        holder.promoteButton.setOnClickListener(v -> listener.onAction(user, "promote"));
+        if (isPostListActivity) {
+            holder.viewPostsButton.setVisibility(View.VISIBLE);
+            holder.viewPostsButton.setOnClickListener(v -> onUserClickListener.onUserClick(user));
+            holder.promoteButton.setVisibility(View.GONE); // מסתיר את כפתור המנהל
+        } else {
+            holder.viewPostsButton.setVisibility(View.GONE);
+            holder.promoteButton.setVisibility(View.VISIBLE);
+            holder.promoteButton.setOnClickListener(v -> actionListener.onAction(user, "promote"));
+        }
+
+        holder.banButton.setText(user.isBanned() ? "בטל חסימה" : "חסום");
+        holder.banButton.setOnClickListener(v -> actionListener.onAction(user, "ban"));
+
+        holder.tempBanButton.setOnClickListener(v -> actionListener.onAction(user, "temp_ban"));
     }
+
+
 
     @Override
     public int getItemCount() {
@@ -59,7 +86,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
     static class UserViewHolder extends RecyclerView.ViewHolder {
         TextView emailTextView;
-        Button banButton, tempBanButton, promoteButton;
+        Button banButton, tempBanButton, promoteButton, viewPostsButton; // הוספנו את viewPostsButton
 
         UserViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -67,6 +94,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             banButton = itemView.findViewById(R.id.banUserButton);
             tempBanButton = itemView.findViewById(R.id.tempBanUserButton);
             promoteButton = itemView.findViewById(R.id.promoteUserButton);
+            viewPostsButton = itemView.findViewById(R.id.viewPostsButton); // אתחול כפתור "פוסטים"
         }
     }
+
 }
