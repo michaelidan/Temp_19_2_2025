@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+ קובץ XML זה מגדיר את ממשק המשתמש עבור המסך שמציג רשימת פוסטים של משתמש ספציפי.
+ התצוגה מכילה RecyclerView בתוך LinearLayout.
+-->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    <!--
+        LinearLayout מוגדר כפריסה אנכית (vertical) ומשתרע על כל המסך (match_parent).
+        זהו קונטיינר שמכיל את ה-RecyclerView להצגת הפוסטים.
+    -->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/postRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    <!--
+        RecyclerView - רכיב להצגת רשימה של פוסטים, מקבל ID ייחודי כדי שניתן יהיה להשתמש בו בקוד Java.
+        מוגדר כך שהוא יתפוס את כל שטח המסך (match_parent).
+        הרשימה נטענת דינמית מתוך Firebase Firestore באמצעות Adapter מתאים.
+    -->
 </LinearLayout>

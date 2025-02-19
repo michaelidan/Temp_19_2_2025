@@ -37,7 +37,7 @@ public class UserPostsActivity extends AppCompatActivity implements MyPostsAdapt
         postAdapter = new MyPostsAdapter(postList, this, this, isAdminView);
         postRecyclerView.setAdapter(postAdapter);
 
-        this.userId = getIntent().getStringExtra("userId");
+        userId = getIntent().getStringExtra("userId"); // this.userId -> userId
         Log.d(TAG, "📥 Received userId: " + userId);
         Log.d("UserPostsActivity", "📥 Received userId: " + userId); // ✅ הדפסת מה שהתקבל
 
@@ -53,57 +53,35 @@ public class UserPostsActivity extends AppCompatActivity implements MyPostsAdapt
 
 
     private void loadUserPosts() {
-        Log.d(TAG, "📥 Received userId: " + userId); // ✅ בדיקה אם ה-ID התקבל נכון
-
-        if (userId == null || userId.isEmpty()) {
-            Log.e(TAG, "❌ שגיאה: userId חסר!");
-            Toast.makeText(this, "שגיאה: מזהה משתמש חסר", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Log.d(TAG, "🔍 Fetching posts for userId: " + userId);
         db.collection("posts")
-                .whereEqualTo("userId", userId.trim()) // ✅ מסיר רווחים מיותרים
-                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .whereEqualTo("userId", userId) // 🔴 ודא שהשדה userId תואם לשם ב-Firestore
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         postList.clear();
 
                         if (task.getResult().isEmpty()) {
-                            Log.d(TAG, "⚠️ No posts found for userId: " + userId);
                             Toast.makeText(this, "למשתמש זה אין פוסטים", Toast.LENGTH_SHORT).show();
                         } else {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Post post = document.toObject(Post.class);
                                 post.setId(document.getId());
                                 postList.add(post);
-                                Log.d(TAG, "✅ Loaded post ID: " + post.getId() + ", Description: " + post.getDescription());
                             }
                         }
 
                         postAdapter.notifyDataSetChanged();
-                        Log.d(TAG, "🔄 Adapter updated with " + postList.size() + " posts.");
                     } else {
-                        Log.e(TAG, "❌ Failed to load posts", task.getException());
                         Toast.makeText(this, "שגיאה בטעינת הפוסטים", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-
     @Override
     public void onDeleteClick(Post post) {
         db.collection("posts").document(post.getId()).delete()
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(this, "הפוסט נמחק בהצלחה", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "📩 Received userId: " + userId);
-                    loadUserPosts(); // רענון הרשימה
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error deleting post", e);
-                    Toast.makeText(this, "שגיאה במחיקת הפוסט", Toast.LENGTH_SHORT).show();
-                });
+                .addOnSuccessListener(aVoid -> loadUserPosts())
+                .addOnFailureListener(e -> Toast.makeText(this, "שגיאה במחיקת הפוסט", Toast.LENGTH_SHORT).show());
     }
 
     @Override

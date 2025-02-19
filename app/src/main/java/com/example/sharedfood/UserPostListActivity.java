@@ -14,51 +14,54 @@ import java.util.List;
 
 public class UserPostListActivity extends AppCompatActivity {
 
-    private RecyclerView userRecyclerView;
-    private UserAdapter userAdapter;
-    private FirebaseFirestore db;
+    private RecyclerView userRecyclerView; // רשימה להצגת המשתמשים
+    private UserAdapter userAdapter; // אדפטר לתצוגת המשתמשים
+    private FirebaseFirestore db; // חיבור למסד הנתונים Firestore
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_post_list);
+        setContentView(R.layout.activity_user_post_list); // קביעת קובץ ה-XML המתאים
 
-        db = FirebaseFirestore.getInstance();
-        userRecyclerView = findViewById(R.id.userRecyclerView);
-        userRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        db = FirebaseFirestore.getInstance(); // אתחול Firestore כדי לשלוף נתונים
+        userRecyclerView = findViewById(R.id.userRecyclerView); // מציאת ה-RecyclerView מתוך ה-XML
+        userRecyclerView.setLayoutManager(new LinearLayoutManager(this)); // הגדרת תצוגה ליניארית (רשימה אנכית)
 
+        // אתחול האדפטר עם רשימה ריקה ופעולת צפייה בפוסטים של המשתמש
         userAdapter = new UserAdapter(new ArrayList<>(), null, this::viewUserPosts);
-        userRecyclerView.setAdapter(userAdapter);
+        userRecyclerView.setAdapter(userAdapter); // חיבור האדפטר ל-RecyclerView
 
-        loadUsers();
+        loadUsers(); // קריאה לפונקציה שתביא את רשימת המשתמשים מהמסד
     }
 
     private void loadUsers() {
+        // שליפת רשימת המשתמשים ממסד הנתונים Firestore
         db.collection("users").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                List<User> userList = new ArrayList<>();
-                task.getResult().forEach(document -> {
-                    String userId = document.getId();  // 🔴 קבלת userId מה-Firestore
-                    String email = document.getString("email");
-                    boolean isBanned = document.getBoolean("isBanned") != null && document.getBoolean("isBanned");
-                    Long tempBanTime = document.getLong("tempBanTime");
+            if (task.isSuccessful()) { // בדיקה אם השליפה הצליחה
+                List<User> userList = new ArrayList<>(); // יצירת רשימה חדשה של משתמשים
 
+                // מעבר על כל המסמכים שהתקבלו מהמסד
+                task.getResult().forEach(document -> {
+                    String userId = document.getId(); // 🔴 קבלת userId מה-Firestore
+                    String email = document.getString("email"); // שליפת האימייל של המשתמש
+                    boolean isBanned = document.getBoolean("isBanned") != null && document.getBoolean("isBanned"); // בדיקה אם המשתמש חסום
+                    Long tempBanTime = document.getLong("tempBanTime"); // קבלת זמן חסימה זמני, אם קיים
+
+                    // יצירת אובייקט משתמש והוספתו לרשימה
                     userList.add(new User(userId, email, isBanned, tempBanTime));
                 });
-                userAdapter.updateUsers(userList);
+
+                userAdapter.updateUsers(userList); // עדכון האדפטר עם הרשימה החדשה של המשתמשים
             }
         });
     }
 
-
     private void viewUserPosts(User user) {
-        Log.d("UserPostListActivity", "📌 Sending userId: " + user.getId());
+        Log.d("UserPostListActivity", "📌 Sending userId: " + user.getId()); // הדפסת מזהה המשתמש ללוג
 
-        Intent intent = new Intent(this, PostsOfUserActivity.class);
-        intent.putExtra("userId", user.getId()); // שולחים את ה-ID הנכון
-        startActivity(intent);
+        Intent intent = new Intent(this, UserPostsActivity.class); // PostsOfUserActivity -> UserPostsActivity
+        // יצירת מעבר למסך הצגת הפוסטים של המשתמש
+        intent.putExtra("userId", user.getId()); // שליחת userId דרך Intent למסך הבא
+        startActivity(intent); // התחלת המסך החדש
     }
-
-
-
 }
