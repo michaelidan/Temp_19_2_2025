@@ -128,6 +128,7 @@ public class MyPostsAdapter extends RecyclerView.Adapter<MyPostsAdapter.PostView
 
 
 
+
     @Override
     public int getItemCount() {
         return posts.size();

@@ -58,12 +58,14 @@ public class UserPostsActivity extends AppCompatActivity
     }
 
     private void loadUserPosts() {
-        // הדפסת מידע בלוג לפני ביצוע השאילתא
-        Log.d(TAG, "🔍 Checking userId before querying Firestore: " + userId);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        String userId = auth.getCurrentUser().getUid(); // קבלת מזהה המשתמש הנוכחי
+
+        Log.d(TAG, "🔍 Checking userId before querying Firestore: " + userId); // הדפסת מידע בלוג לפני ביצוע השאילתא
 
         // ביצוע שאילתא במסד הנתונים לפי מזהה המשתמש
         db.collection("posts")
-                .whereEqualTo("userId", userId.trim()) // ✅ מחפש את הפוסטים של המשתמש על פי מזהה המשתמש
+                .whereEqualTo("userId", userId.trim()) // מבצע חיפוש לפי userId
                 .get()
                 .addOnCompleteListener(task -> { // מאזין לתוצאה של השאילתא
                     if (task.isSuccessful()) { // אם השאילתא הצליחה
@@ -86,6 +88,7 @@ public class UserPostsActivity extends AppCompatActivity
                     }
                 });
     }
+
 
     @Override
     public void onDeleteClick(Post post) {
