@@ -7,6 +7,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -35,8 +36,10 @@ public class PostsOfUserActivity extends AppCompatActivity {
         postAdapter = new MyPostsAdapter(postList, null, null, false); // אתחול האדפטר עם הרשימה (ללא אפשרות עריכה)
         postRecyclerView.setAdapter(postAdapter); // חיבור האדפטר ל-RecyclerView
 
-        // מקבלים את userId שהועבר מהאקטיביטי הקודם דרך Intent
-        userId = getIntent().getStringExtra("userId");
+        // אתחול FirebaseAuth
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        // קבלת ה-userId מהמשתמש המחובר ב-Firebase Auth
+        userId = auth.getCurrentUser().getUid();
 
         Log.d(TAG, "📥 Received userId: " + userId); // הדפסת המזהה שהתקבל לצורך דיבוג
 
